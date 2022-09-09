@@ -3,16 +3,31 @@ import tkinter as tk
 import imutils
 from pytesseract import pytesseract
 from PIL import Image, ImageTk
-
+from googletrans import Translator 
 
 root = tk.Tk()
 root.title('Imagem em texto')
 cap = cv2.VideoCapture(0)
 video = None
 frame = None
+img_texto = None
+
+
+def tradu():
+    global img_texto
+    try:
+        traduzido = Translator().translate(text=img_texto, dest='pt').text
+        text_box = tk.Text(root, height=12, width=74, padx=10, pady=15, font=("helvetica", 16), border=10, wrap='word')
+        text_box.insert(1.0, traduzido)
+        text_box.tag_configure("left", justify="left")
+        text_box.tag_add("center", 1.0, "end")
+        text_box.place(relx=0.5, rely=0.80, anchor=tk.CENTER)
+    except:
+        pass
 
 
 def texto():
+    global img_texto
     caminhot = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
     pytesseract.tesseract_cmd = caminhot
     img_texto = pytesseract.image_to_string("foto.jpg")
@@ -84,8 +99,10 @@ button2 = tk.Button(root, text="Print", command=foto, width=10, height=2)
 button2.place(x=40, y=70)
 button3 = tk.Button(root, text="Texto", command=texto, width=10, height=2)
 button3.place(x=40, y=110)
-button4 = tk.Button(root, text="Fechar video", command=fechar, width=10, height=2)
+button4 = tk.Button(root, text="Traduzir", command=tradu, width=10, height=2)
 button4.place(x=40, y=150)
+button5 = tk.Button(root, text="Fechar video", command=fechar, width=10, height=2)
+button5.place(x=40, y=190)
 
 BordaVideo = tk.Label(root, bg="black")
 BordaVideo.place(x=160, y=30)
