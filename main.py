@@ -1,14 +1,15 @@
 import cv2
 import tkinter as tk
 import imutils
-from tkinter import Checkbutton, Entry, StringVar, messagebox, filedialog
 from pytesseract import pytesseract
 from PIL import Image, ImageTk
+
 
 root = tk.Tk()
 root.title('Imagem em texto')
 cap = cv2.VideoCapture(0)
 video = None
+frame = None
 
 
 def texto():
@@ -23,17 +24,21 @@ def texto():
 
 
 def foto():
-    frame = video.read()
+    global frame
     cv2.imwrite("foto.jpg", frame)
     
+
 def live_video():
     global video
     video = cv2.VideoCapture(0)
     iniciar()
 
+
 def iniciar():
     global video
+    global frame
     ret, frame = video.read()
+    
     if ret == True:
         frame = imutils.resize(frame, width=640)
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -45,13 +50,11 @@ def iniciar():
     else:
         video.release()
 
+
 def fechar():
     global video
     #BordaVideo.place_forget()
     video.release()
-
-
-
 
 
 # tamanho do monitor que acessou o programa
@@ -88,21 +91,22 @@ BordaVideo = tk.Label(root, bg="black")
 BordaVideo.place(x=160, y=30)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 root.protocol("WM_DELETE_WINDOW")
 root.mainloop()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
